@@ -1,6 +1,14 @@
 #include "GameScene.h"
 
-void GameScene::Initialize() {}
+GameScene::~GameScene() 
+{ 
+	Model2::StaticFinalize(); 
+}
+
+void GameScene::Initialize() 
+{
+	Model2::StaticInitialize();
+}
 
 void GameScene::UpDate() {}
 
