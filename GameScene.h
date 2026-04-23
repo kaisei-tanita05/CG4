@@ -1,6 +1,7 @@
 #pragma once
 #include "KamataEngine.h"
 #include "Model2.h"
+#include "UpData.h"
 
 using namespace KamataEngine;
 
@@ -14,4 +15,11 @@ public:
 	void UpDate();
 
 	void Draw();
+
+private:
+	uint32_t textureHandle_ = 0;
+	Model2* model_ = nullptr;
+	WorldTransform worldTransform_;
+	Camera camera_;
+	UpData* upData_ = nullptr;
 };

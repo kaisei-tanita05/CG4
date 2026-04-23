@@ -1,5 +1,6 @@
 #include <Windows.h>
 #include <KamataEngine.h>
+#include "GameScene.h"
 
 using namespace KamataEngine;
 
@@ -8,6 +9,9 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 	// エンジンの初期化
 	Initialize(L"LE3D_17_タニタ_カイセイ_CG4");
+
+	GameScene* gameScene = new GameScene();
+	gameScene->Initialize();
 
 	// DirectXCommonインスタンスの取得
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
@@ -19,8 +23,12 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 			break;
 		}
 
+		gameScene->UpDate();
+
 		// 描画開始
 		dxCommon->PreDraw();
+
+		gameScene->Draw();
 
 		// 描画終了
 		dxCommon->PostDraw();
