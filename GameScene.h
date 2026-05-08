@@ -19,6 +19,7 @@ public:
 private:
 	uint32_t textureHandle_ = 0;
 	Model2* model_ = nullptr;
+	Model2* model2_ = nullptr;
 	WorldTransform worldTransform_;
 	Camera camera_;
 	UpData* upData_ = nullptr;

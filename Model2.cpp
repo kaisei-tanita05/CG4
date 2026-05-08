@@ -1,4 +1,4 @@
-// #include <3d\Model.h>
+#include <3d\Model.h>
 #include "Model2.h"
 #include <3d\Camera.h>
 #include <3d\Material.h>
@@ -160,28 +160,28 @@ Model2* Model2::CreateSquare() {
 		// インデックス開始番号
 		uint32_t indexStart = i * 6;
 
-		//座標
+		// 座標
 		float offsetX = i * 2.0f - 2.0f;
 
 		// 左下
 		vertices[vertexStart + 0].pos = {-1.0f + offsetX, -1.0f, 0.0f};
 		vertices[vertexStart + 0].uv = {0.0f, 1.0f};
-		vertices[vertexStart + 0].normal = {0.0f, 0.0f, -1.0f};
+		vertices[vertexStart + 0].normal = {0.0f, 0.0f, 1.0f};
 
 		// 左上
 		vertices[vertexStart + 1].pos = {-1.0f + offsetX, 1.0f, 0.0f};
 		vertices[vertexStart + 1].uv = {0.0f, 0.0f};
-		vertices[vertexStart + 1].normal = {0.0f, 0.0f, -1.0f};
+		vertices[vertexStart + 1].normal = {0.0f, 0.0f, 1.0f};
 
 		// 右下
 		vertices[vertexStart + 2].pos = {1.0f + offsetX, -1.0f, 0.0f};
 		vertices[vertexStart + 2].uv = {1.0f, 1.0f};
-		vertices[vertexStart + 2].normal = {0.0f, 0.0f, -1.0f};
+		vertices[vertexStart + 2].normal = {0.0f, 0.0f, 1.0f};
 
 		// 右上
 		vertices[vertexStart + 3].pos = {1.0f + offsetX, 1.0f, 0.0f};
 		vertices[vertexStart + 3].uv = {1.0f, 0.0f};
-		vertices[vertexStart + 3].normal = {0.0f, 0.0f, -1.0f};
+		vertices[vertexStart + 3].normal = {0.0f, 0.0f, 1.0f};
 
 		// インデックス
 		indices[indexStart + 0] = vertexStart + 0;
@@ -213,6 +213,101 @@ Model2* Model2::CreateSquare() {
 	// indices[0] = 0; indices[1] = 1; indices[2] = 2;
 	// indices[3] = 1; indices[4] = 3; indices[5] = 2;
 
+	instance->InitializeFromVertices(vertices, indices);
+
+	return instance;
+}
+
+Model2* Model2::CreateRing() {
+
+	// メモリ確保
+	Model2* instance = new Model2;
+
+	std::vector<Mesh::VertexPosNormalUv> vertices;
+	std::vector<uint32_t> indices;
+
+	// 分割数
+	const uint32_t kRingDivide = 32;
+
+	// 半径
+	const float kOuterRadius = 1.0f;
+	const float kInnerRadius = 0.5f;
+
+	// 頂点数
+	const uint32_t kNumVertices = kRingDivide * 2;
+
+	// インデックス数
+	const uint32_t kNumIndices = kRingDivide * 6;
+
+	vertices.resize(kNumVertices);
+	indices.resize(kNumIndices);
+
+	float pi = std::numbers::pi_v<float>;
+
+	// 1分割あたりのラジアン
+	float radianPerDivide = 2.0f * pi / float(kRingDivide);
+
+	//========================
+	// 頂点生成
+	//========================
+	for (uint32_t index = 0; index < kRingDivide; ++index) {
+
+		float angle = index * radianPerDivide;
+
+		float cosAngle = std::cos(angle);
+		float sinAngle = std::sin(angle);
+
+		float u = float(index) / float(kRingDivide);
+
+		// 内側
+		vertices[index * 2 + 0].pos = {cosAngle * kInnerRadius, sinAngle * kInnerRadius, 0.0f};
+
+		vertices[index * 2 + 0].uv = {u, 1.0f};
+
+		vertices[index * 2 + 0].normal = {0.0f, 0.0f, -1.0f};
+
+		// 外側
+		vertices[index * 2 + 1].pos = {cosAngle * kOuterRadius, sinAngle * kOuterRadius, 0.0f};
+
+		vertices[index * 2 + 1].uv = {u, 0.0f};
+
+		vertices[index * 2 + 1].normal = {0.0f, 0.0f, -1.0f};
+	}
+
+	//========================
+	// インデックス生成
+	//========================
+	for (uint32_t i = 0; i < kRingDivide; i++) {
+
+		uint32_t indexStart = i * 6;
+
+		uint32_t currentInner = i * 2;
+		uint32_t currentOuter = i * 2 + 1;
+
+		uint32_t nextInner;
+		uint32_t nextOuter;
+
+		// 最後なら先頭へ戻す
+		if (i == kRingDivide - 1) {
+			nextInner = 0;
+			nextOuter = 1;
+		} else {
+			nextInner = (i + 1) * 2;
+			nextOuter = (i + 1) * 2 + 1;
+		}
+
+		// triangle 1
+		indices[indexStart + 0] = currentInner;
+		indices[indexStart + 1] = nextInner;
+		indices[indexStart + 2] = currentOuter;
+
+		// triangle 2
+		indices[indexStart + 3] = currentOuter;
+		indices[indexStart + 4] = nextInner;
+		indices[indexStart + 5] = nextOuter;
+	}
+
+	// メッシュ生成
 	instance->InitializeFromVertices(vertices, indices);
 
 	return instance;
@@ -256,7 +351,6 @@ void Model2::InitializeFromFile(const std::string& modelname, bool smoothing) {
 }
 
 void Model2::InitializeFromVertices(const std::vector<Mesh::VertexPosNormalUv>& vertices, const std::vector<uint32_t>& indices) {
-
 	// メッシュ生成
 	meshes_.emplace_back(std::make_unique<Mesh>());
 	Mesh* mesh = meshes_.back().get();
@@ -635,7 +729,6 @@ void Model2::LoadTextures() {
 }
 
 void Model2::Draw(const WorldTransform& worldTransform, const Camera& camera, const ObjectColor* objectColor) {
-
 	ModelCommon2* common = ModelCommon2::GetInstance();
 
 	// ライトコマンドを積む
@@ -658,7 +751,6 @@ void Model2::Draw(const WorldTransform& worldTransform, const Camera& camera, co
 }
 
 void Model2::Draw(const WorldTransform& worldTransform, const Camera& camera, uint32_t textureHadle, const ObjectColor* objectColor) {
-
 	ModelCommon2* common = ModelCommon2::GetInstance();
 
 	// ライトコマンドを積む
@@ -681,7 +773,6 @@ void Model2::Draw(const WorldTransform& worldTransform, const Camera& camera, ui
 }
 
 void Model2::SetAlpha(float alpha) {
-
 	for (auto& pair : materials_) {
 		std::unique_ptr<Material>& material = pair.second;
 		material->alpha_ = alpha;
@@ -756,7 +847,6 @@ void ModelCommon2::PostDraw() {
 }
 
 void ModelCommon2::InitializeGraphicsPipeline() {
-
 	HRESULT result = S_FALSE;
 	ComPtr<ID3DBlob> vsBlob;    // 頂点シェーダオブジェクト
 	ComPtr<ID3DBlob> psBlob;    // ピクセルシェーダオブジェクト

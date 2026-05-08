@@ -11,7 +11,7 @@ void GameScene::Initialize()
 
 	// モデル生成（まずは簡単に四角）
 	model_ = Model2::CreateSquare();
-
+	model2_ = Model2::CreateRing();
 	// ワールドトランスフォーム初期化
 	worldTransform_.Initialize();
 
@@ -39,7 +39,7 @@ void GameScene::Draw()
 	Model2::PreDraw(commandList);
 
 	// ★ここで描画
-	model_->Draw(worldTransform_, camera_, textureHandle_);
+	model2_->Draw(worldTransform_, camera_, textureHandle_);
 
 	// Model描画終了
 	Model2::PostDraw();
