@@ -1,4 +1,4 @@
-//#include <3d\Model.h>
+#include <3d\Model.h>
 #include <3d\Camera.h>
 #include <base\DirectXCommon.h>
 #include <3d\Material.h>
