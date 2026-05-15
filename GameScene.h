@@ -2,6 +2,7 @@
 #include "KamataEngine.h"
 #include "Model2.h"
 #include "UpData.h"
+#include "Effect.h"
 
 using namespace KamataEngine;
 
@@ -19,6 +20,7 @@ public:
 private:
 	uint32_t textureHandle_ = 0;
 	Model2* model_ = nullptr;
+	Effect* model2_ = nullptr;
 	WorldTransform worldTransform_;
 	Camera camera_;
 	UpData* upData_ = nullptr;

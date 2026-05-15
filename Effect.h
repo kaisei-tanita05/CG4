@@ -7,9 +7,8 @@
 #include <unordered_map>
 #include <vector>
 
-namespace KamataEngine {
-class Camera;
-class WorldTransform;
+using namespace KamataEngine;
+//{
 
 class EffectCommon {
 public:
@@ -31,18 +30,18 @@ public:
 	/// </summary>
 	/// <param name="worldTransform">ワールドトランスフォーム</param>
 	/// <param name="camera">カメラ</param>
-	void TransformCommand(const WorldTransform* worldTransform = nullptr, const Camera* camera = nullptr);
+	void TransformCommand(const WorldTransform* worldTransform, const Camera* camera);
 
 	/// <summary>
 	/// 描画前処理
 	/// </summary>
 	/// <param name="commandList">描画コマンドリスト</param>
-	static void PreDraw(ID3D12GraphicsCommandList* commandList);
+	void PreDraw(ID3D12GraphicsCommandList* commandList);
 
 	/// <summary>
 	/// 描画後処理
 	/// </summary>
-	static void PostDraw();
+	void PostDraw();
 
 	/// <summary>
 	/// getter
@@ -148,20 +147,13 @@ private:
 public: // メンバ関数
 	~Effect() = default;
 	/// <summary>
-	/// 描画
-	/// </summary>
-	/// <param name="worldTransform">ワールドトランスフォーム</param>
-	/// <param name="camera">カメラ</param>
-	/// <param name="objectColor">オブジェクトカラー</param>
-	void Draw(const WorldTransform& worldTransform, const Camera& camera, const ObjectColor* objectColor = nullptr);
-	/// <summary>
 	/// 描画（テクスチャ差し替え）
 	/// </summary>
 	/// <param name="worldTransform">ワールドトランスフォーム</param>
 	/// <param name="camera">カメラ</param>
 	/// <param name="textureHadle">テクスチャハンドル</param>
 	/// <param name="objectColor">オブジェクトカラー</param>
-	void Draw(const WorldTransform& worldTransform, const Camera& camera, uint32_t textureHadle, const ObjectColor* objectColor = nullptr);
+	void Draw(const WorldTransform& worldTransform, const Camera& camera,const ObjectColor* objectColor = nullptr);
 	/// <summary>
 	/// メッシュコンテナを取得
 	/// </summary>
@@ -229,4 +221,4 @@ private: // メンバ関数
 
 
 
-}
+//}
