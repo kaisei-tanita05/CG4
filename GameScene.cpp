@@ -10,6 +10,7 @@ GameScene::~GameScene() {
 
 	Model2::StaticFinalize();
 	Effect::StaticFinalize();
+	
 }
 
 void GameScene::Initialize() 
@@ -21,6 +22,7 @@ void GameScene::Initialize()
 
 	Effect::StaticInitialize();
 
+
 	// モデル生成（まずは簡単に四角）
 	model_ = Model2::CreateSquare();
 
@@ -29,7 +31,12 @@ void GameScene::Initialize()
 	// ワールドトランスフォーム初期化
 	worldTransform_.Initialize();
 
+
+	//worldTransform_.rotation_.x = std::numbers::pi_v<float> / 2.0f;
+	//worldTransform_.rotation_.y = std::numbers::pi_v<float> / 2.0f;
 	worldTransform_.rotation_.z = std::numbers::pi_v<float> / 4.0f;
+
+	worldTransform_.scale_ = {1.0f, 1.0f, 1.0f};
 
 	// カメラ初期化
 	camera_.Initialize();
@@ -47,7 +54,6 @@ void GameScene::UpDate()
 	upData_->WorldTransformUpData(worldTransform_);
 
 	worldTransform_.TransferMatrix();
-
 }
 
 void GameScene::Draw() 

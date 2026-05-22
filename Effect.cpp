@@ -138,19 +138,22 @@ Effect* Effect::CreateSquare() {
 	indices.resize(kNumIndices);
 
 	// 左下
-	vertices[0].pos = {-1.0f, -1.0f, 0.0f};
+	vertices[0].pos = {-3.0f, -0.02f, 0.0f};
 	vertices[0].uv = {0.0f, 1.0f};
 	vertices[0].normal = {0.0f, 0.0f, -1.0f};
+
 	// 左上
-	vertices[1].pos = {-1.0f, 1.0f, 0.0f};
-	vertices[1].uv = {0.0f, 0.0f};
+	vertices[1].pos = {-1.0f, 0.15f, 0.0f};
+	vertices[1].uv = {0.3f, 0.0f};
 	vertices[1].normal = {0.0f, 0.0f, -1.0f};
+
 	// 右下
-	vertices[2].pos = {1.0f, -1.0f, 0.0f};
-	vertices[2].uv = {1.0f, 1.0f};
+	vertices[2].pos = {1.0f, -0.15f, 0.0f};
+	vertices[2].uv = {0.7f, 1.0f};
 	vertices[2].normal = {0.0f, 0.0f, -1.0f};
+
 	// 右上
-	vertices[3].pos = {1.0f, 1.0f, 0.0f};
+	vertices[3].pos = {3.0f, 0.02f, 0.0f};
 	vertices[3].uv = {1.0f, 0.0f};
 	vertices[3].normal = {0.0f, 0.0f, -1.0f};
 
