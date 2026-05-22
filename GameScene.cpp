@@ -1,5 +1,7 @@
 #include "GameScene.h"
 #include <numbers>
+#include <cstdlib>
+#include <ctime>
 
 GameScene::~GameScene() {
 	delete model_;
@@ -10,11 +12,20 @@ GameScene::~GameScene() {
 
 	Model2::StaticFinalize();
 	Effect::StaticFinalize();
+
+	for (auto& wt : effects_) {
+
+		delete wt;
+	}
+
+	effects_.clear();
 	
 }
 
 void GameScene::Initialize() 
 {
+
+	srand((unsigned int)time(nullptr));
 
 	textureHandle_ = TextureManager::Load("uvChecker.png");
 
@@ -28,15 +39,31 @@ void GameScene::Initialize()
 
 	model2_ = Effect::CreateSquare();
 
-	// ワールドトランスフォーム初期化
-	worldTransform_.Initialize();
+	
 
 
 	//worldTransform_.rotation_.x = std::numbers::pi_v<float> / 2.0f;
 	//worldTransform_.rotation_.y = std::numbers::pi_v<float> / 2.0f;
-	worldTransform_.rotation_.z = std::numbers::pi_v<float> / 4.0f;
+	//worldTransform_.rotation_.z = std::numbers::pi_v<float> / 4.0f;
 
-	worldTransform_.scale_ = {1.0f, 1.0f, 1.0f};
+	//worldTransform_.scale_ = {1.0f, 1.0f, 1.0f};
+
+
+	for (int i = 0; i < 15; i++) {
+		// ワールドトランスフォーム初期化
+		WorldTransform* wt = new WorldTransform();
+		wt->Initialize();
+
+		float angle = (float)(rand() % 360) * (std::numbers::pi_v<float> / 180.0f);
+
+		wt->rotation_.z = angle;
+
+		float length = (rand() % 100) / 20.0f + 2.0f;
+
+		wt->scale_ = {0.05f, length, 1.0f};
+
+		effects_.push_back(wt);
+	}
 
 	// カメラ初期化
 	camera_.Initialize();
@@ -51,27 +78,27 @@ void GameScene::UpDate()
 	// ★これ追加（超重要）
 	camera_.UpdateMatrix();
 
-	upData_->WorldTransformUpData(worldTransform_);
+	for (auto& wt : effects_) {
 
-	worldTransform_.TransferMatrix();
+		upData_->WorldTransformUpData(*wt);
+
+		wt->TransferMatrix();
+	}
+
+	//worldTransform_.TransferMatrix();
 }
 
 void GameScene::Draw() 
 {
 	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
 
-	//// Model描画開始
-	//Model2::PreDraw(commandList);
-
-	//// ★ここで描画
-	//model_->Draw(worldTransform_, camera_, textureHandle_);
-
-	//// Model描画終了
-	//Model2::PostDraw();
-
 	Effect::PreDraw(commandList);
 
-	model2_->Draw(worldTransform_, camera_);
+	for (auto& wt : effects_) {
+
+		model2_->Draw(*wt, camera_);
+	}
+
 
 	Effect::PostDraw();
 }
