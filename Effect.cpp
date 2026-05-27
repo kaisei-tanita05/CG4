@@ -584,6 +584,65 @@ void Effect::LoadTextures() {
 	}
 }
 
+void Effect::Update(WorldTransform& worldTransform) {
+
+	counter_++;
+
+	switch (state_) {
+
+	// =========================
+	// 拡大
+	// =========================
+	case State::kSpread:
+
+		// 徐々に大きくする
+		worldTransform.scale_.x += 0.2f;
+		worldTransform.scale_.y += 0.2f;
+		worldTransform.scale_.z += 0.2f;
+
+		// 一定時間でフェードへ
+		if (counter_ >= kSpreadTime) {
+			counter_ = 0;
+			state_ = State::kFade;
+		}
+
+		break;
+
+	// =========================
+	// フェードアウト
+	// =========================
+	case State::kFade: {
+
+		// 0.0 ～ 1.0
+		float alpha = 1.0f - (float(counter_) / float(kFadeTime));
+
+		// α設定
+		SetAlpha(alpha);
+
+		// 少し拡大
+		worldTransform.scale_.x += 0.05f;
+		worldTransform.scale_.y += 0.05f;
+		worldTransform.scale_.z += 0.05f;
+
+		// 終了
+		if (counter_ >= kFadeTime) {
+			state_ = State::kDead;
+		}
+
+		break;
+	}
+
+	// =========================
+	// 消滅
+	// =========================
+	case State::kDead:
+		break;
+	}
+
+	// 行列更新
+	worldTransform.TransferMatrix();
+}
+
 void Effect::Draw(const WorldTransform& worldTransform, const Camera& camera, const ObjectColor* objectColor) {
 	EffectCommon* common = EffectCommon::GetInstance();
 

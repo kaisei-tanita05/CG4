@@ -24,6 +24,9 @@ private:
 	Effect* model2_ = nullptr;
 	std::vector<WorldTransform*> effects_;
 	WorldTransform worldTransform_;
+	//複数パーティクル
+	std::vector<Effect*> effecties;
+	std::vector<WorldTransform> effectWorldTransforms_;
 	Camera camera_;
 	UpData* upData_ = nullptr;
 };

@@ -19,6 +19,13 @@ GameScene::~GameScene() {
 	}
 
 	effects_.clear();
+
+	for (Effect* effect : effects_) {
+		delete effect;
+	}
+
+	effects_.clear();
+	effectWorldTransforms_.clear();
 	
 }
 
