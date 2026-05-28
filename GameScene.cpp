@@ -13,19 +13,14 @@ GameScene::~GameScene() {
 	Model2::StaticFinalize();
 	Effect::StaticFinalize();
 
-	for (auto& wt : effects_) {
 
-		delete wt;
+	for (auto& e : effects_) {
+
+		delete e.worldTransform;
+		e.worldTransform = nullptr;
 	}
 
 	effects_.clear();
-
-	for (Effect* effect : effects_) {
-		delete effect;
-	}
-
-	effects_.clear();
-	effectWorldTransforms_.clear();
 	
 }
 
@@ -56,20 +51,34 @@ void GameScene::Initialize()
 	//worldTransform_.scale_ = {1.0f, 1.0f, 1.0f};
 
 
+	//for (int i = 0; i < 15; i++) {
+
+	//	effects_.emplace_back();
+
+	//	EffectData& effect = effects_.back();
+
+	//	effect.worldTransform = new WorldTransform();
+
+	//	effect.worldTransform->Initialize();
+
+	//	float angle = (float)(rand() % 360) * (std::numbers::pi_v<float> / 180.0f);
+
+	//	effect.worldTransform->rotation_.z = angle;
+
+	//	float length = (rand() % 100) / 20.0f + 2.0f;
+
+	//	effect.worldTransform->scale_ = {0.05f, length, 1.0f};
+
+	//	float speed = (rand() % 100) / 500.0f + 0.02f;
+
+	//	effect.velocity = {cosf(angle) * speed, sinf(angle) * speed, 0.0f};
+
+	//	effect.lifeTime = 20 + rand() % 20;
+	//}
+
 	for (int i = 0; i < 15; i++) {
-		// ワールドトランスフォーム初期化
-		WorldTransform* wt = new WorldTransform();
-		wt->Initialize();
 
-		float angle = (float)(rand() % 360) * (std::numbers::pi_v<float> / 180.0f);
-
-		wt->rotation_.z = angle;
-
-		float length = (rand() % 100) / 20.0f + 2.0f;
-
-		wt->scale_ = {0.05f, length, 1.0f};
-
-		effects_.push_back(wt);
+		CreateEffect();
 	}
 
 	// カメラ初期化
@@ -82,17 +91,94 @@ void GameScene::Initialize()
 
 void GameScene::UpDate() 
 {
-	// ★これ追加（超重要）
+	
 	camera_.UpdateMatrix();
 
-	for (auto& wt : effects_) {
+	for (size_t i = 0; i < effects_.size();) {
 
-		upData_->WorldTransformUpData(*wt);
+		auto& e = effects_[i];
 
-		wt->TransferMatrix();
+		e.currentTime++;
+
+		// 移動
+		//e.worldTransform->translation_.x += e.velocity.x;
+		//e.worldTransform->translation_.y += e.velocity.y;
+
+		// 拡大
+		e.worldTransform->scale_.x += e.scaleSpeed;
+
+		// フェードアウト
+		e.alpha = 1.0f - (float(e.currentTime) / float(e.lifeTime));
+
+		// α適用
+		model2_->SetAlpha(e.alpha);
+
+		// 更新
+		upData_->WorldTransformUpData(*e.worldTransform);
+
+		e.worldTransform->TransferMatrix();
+
+		// 寿命終了
+		if (e.currentTime >= e.lifeTime) {
+
+			delete e.worldTransform;
+			e.worldTransform = nullptr;
+
+			effects_.erase(effects_.begin() + i);
+
+		} else {
+
+			i++;
+		}
 	}
 
-	//worldTransform_.TransferMatrix();
+	// 全部消えたら一気に再生成
+	if (effects_.empty()) {
+
+		for (int i = 0; i < 15; i++) {
+
+			CreateEffect();
+		}
+	}
+}
+
+void GameScene::CreateEffect() {
+
+	effects_.emplace_back();
+
+	EffectData& effect = effects_.back();
+
+	effect.worldTransform = new WorldTransform();
+
+	effect.worldTransform->Initialize();
+
+	// ランダム角度
+	float angle = (float)(rand() % 360) * (std::numbers::pi_v<float> / 180.0f);
+
+	effect.worldTransform->rotation_.z = angle;
+
+	// 長さ
+	float length = (rand() % 200) / 20.0f + 1.0f;
+
+	effect.worldTransform->scale_ = {0.01f, length, 1.0f};
+
+	// 初期位置
+	effect.worldTransform->translation_ = {0.0f, 0.0f, 0.0f};
+
+	// 速度
+	float speed = (rand() % 100) / 500.0f + 0.02f;
+
+	effect.velocity = {cosf(angle) * speed, sinf(angle) * speed, 0.0f};
+
+	// 拡大速度
+	effect.scaleSpeed = 0.01f;
+
+	// 寿命
+	effect.lifeTime = 40;
+
+	effect.currentTime = 0;
+
+	effect.alpha = 1.0f;
 }
 
 void GameScene::Draw() 
@@ -101,9 +187,9 @@ void GameScene::Draw()
 
 	Effect::PreDraw(commandList);
 
-	for (auto& wt : effects_) {
+	for (auto& effect : effects_) {
 
-		model2_->Draw(*wt, camera_);
+		model2_->Draw(*effect.worldTransform, camera_);
 	}
 
 

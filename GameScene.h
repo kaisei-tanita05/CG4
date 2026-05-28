@@ -18,15 +18,29 @@ public:
 
 	void Draw();
 
+	void CreateEffect();
+
 private:
 	uint32_t textureHandle_ = 0;
 	Model2* model_ = nullptr;
 	Effect* model2_ = nullptr;
-	std::vector<WorldTransform*> effects_;
-	WorldTransform worldTransform_;
-	//複数パーティクル
-	std::vector<Effect*> effecties;
-	std::vector<WorldTransform> effectWorldTransforms_;
 	Camera camera_;
 	UpData* upData_ = nullptr;
+
+	struct EffectData {
+
+		WorldTransform* worldTransform;
+
+		Vector3 velocity;
+
+		float alpha = 1.0f;
+
+		float scaleSpeed = 0.08f;
+
+		int lifeTime = 30;
+
+		int currentTime = 0;
+	};
+
+	std::vector<EffectData> effects_;
 };
