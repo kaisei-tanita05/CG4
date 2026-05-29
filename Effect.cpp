@@ -820,16 +820,6 @@ void EffectCommon::InitializeGraphicsPipeline() {
 	//blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
 	blenddesc.DestBlend = D3D12_BLEND_ONE;
 
-	//// 加算合成
-	//blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
-	//blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
-	//blenddesc.DestBlend = D3D12_BLEND_ONE;
-
-	//// 減算合成
-	//blenddesc.BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;
-	//blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
-	//blenddesc.DestBlend = D3D12_BLEND_ONE;
-
 	// 共通設定
 	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
 	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;

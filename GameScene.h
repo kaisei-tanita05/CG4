@@ -18,7 +18,7 @@ public:
 
 	void Draw();
 
-	void CreateEffect();
+	void CreateEffect(Vector3 position);
 
 private:
 	uint32_t textureHandle_ = 0;
