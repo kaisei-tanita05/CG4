@@ -1,7 +1,7 @@
 #include "GameScene.h"
-#include <numbers>
 #include <cstdlib>
 #include <ctime>
+#include <numbers>
 
 GameScene::~GameScene() {
 	delete model_;
@@ -13,7 +13,6 @@ GameScene::~GameScene() {
 	Model2::StaticFinalize();
 	Effect::StaticFinalize();
 
-
 	for (auto& e : effects_) {
 
 		delete e.worldTransform;
@@ -21,11 +20,9 @@ GameScene::~GameScene() {
 	}
 
 	effects_.clear();
-	
 }
 
-void GameScene::Initialize() 
-{
+void GameScene::Initialize() {
 
 	srand((unsigned int)time(nullptr));
 
@@ -35,46 +32,10 @@ void GameScene::Initialize()
 
 	Effect::StaticInitialize();
 
-
 	// モデル生成（まずは簡単に四角）
 	model_ = Model2::CreateSquare();
 
 	model2_ = Effect::CreateSquare();
-
-	
-
-
-	//worldTransform_.rotation_.x = std::numbers::pi_v<float> / 2.0f;
-	//worldTransform_.rotation_.y = std::numbers::pi_v<float> / 2.0f;
-	//worldTransform_.rotation_.z = std::numbers::pi_v<float> / 4.0f;
-
-	//worldTransform_.scale_ = {1.0f, 1.0f, 1.0f};
-
-
-	//for (int i = 0; i < 15; i++) {
-
-	//	effects_.emplace_back();
-
-	//	EffectData& effect = effects_.back();
-
-	//	effect.worldTransform = new WorldTransform();
-
-	//	effect.worldTransform->Initialize();
-
-	//	float angle = (float)(rand() % 360) * (std::numbers::pi_v<float> / 180.0f);
-
-	//	effect.worldTransform->rotation_.z = angle;
-
-	//	float length = (rand() % 100) / 20.0f + 2.0f;
-
-	//	effect.worldTransform->scale_ = {0.05f, length, 1.0f};
-
-	//	float speed = (rand() % 100) / 500.0f + 0.02f;
-
-	//	effect.velocity = {cosf(angle) * speed, sinf(angle) * speed, 0.0f};
-
-	//	effect.lifeTime = 20 + rand() % 20;
-	//}
 
 	for (int g = 0; g < 5; g++) {
 
@@ -98,9 +59,8 @@ void GameScene::Initialize()
 	assert(upData_);
 }
 
-void GameScene::UpDate() 
-{
-	
+void GameScene::UpDate() {
+
 	camera_.UpdateMatrix();
 
 	for (size_t i = 0; i < effects_.size();) {
@@ -110,11 +70,11 @@ void GameScene::UpDate()
 		e.currentTime++;
 
 		// 移動
-		//e.worldTransform->translation_.x += e.velocity.x;
-		//e.worldTransform->translation_.y += e.velocity.y;
+		// e.worldTransform->translation_.x += e.velocity.x;
+		// e.worldTransform->translation_.y += e.velocity.y;
 
 		// 拡大
-		//e.worldTransform->scale_.x += e.scaleSpeed;
+		// e.worldTransform->scale_.x += e.scaleSpeed;
 
 		e.worldTransform->rotation_.z += 0.1f;
 
@@ -200,19 +160,21 @@ void GameScene::CreateEffect(Vector3 position) {
 	effect.currentTime = 0;
 
 	effect.alpha = 1.0f;
+
+	effect.colorData.Initialize();
+
+	effect.colorData.SetColor({(float)(rand() % 256) / 255.0f, (float)(rand() % 256) / 255.0f, (float)(rand() % 256) / 255.0f, 1.0f});
 }
 
-void GameScene::Draw() 
-{
+void GameScene::Draw() {
 	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
 
 	Effect::PreDraw(commandList);
 
 	for (auto& effect : effects_) {
 
-		model2_->Draw(*effect.worldTransform, camera_);
+		model2_->Draw(*effect.worldTransform, camera_, &effect.colorData);
 	}
-
 
 	Effect::PostDraw();
 }

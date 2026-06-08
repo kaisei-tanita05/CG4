@@ -40,6 +40,10 @@ private:
 		int lifeTime = 30;
 
 		int currentTime = 0;
+
+		Vector4 color = {1, 1, 1, 1}; // ←追加
+
+		ObjectColor colorData;
 	};
 
 	std::vector<EffectData> effects_;
