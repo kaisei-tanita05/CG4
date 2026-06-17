@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <numbers>
+#include <cassert>
 
 GameScene::~GameScene() {
 	delete model_;
