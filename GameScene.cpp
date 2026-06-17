@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <numbers>
+#include <cassert>
 
 GameScene::~GameScene() {
 	delete model_;
@@ -9,6 +10,9 @@ GameScene::~GameScene() {
 
 	delete model2_;
 	model2_ = nullptr;
+	
+	//3Dモデルデータの解放
+	delete modelParticle_;
 
 	Model2::StaticFinalize();
 	Effect::StaticFinalize();
@@ -51,9 +55,21 @@ void GameScene::Initialize() {
 		}
 	}
 
+	//3Dモデルデータの生成
+	modelParticle_ = Model::CreateSphere(4, 4);
+
+	// パーティクルの生成
+	particle_ = new Particle();
+
+	// パーティクル初期化
+	particle_->Initialize(modelParticle_);
+
 	// カメラ初期化
 	camera_.Initialize();
 	camera_.translation_ = {0, 0, -10.0f};
+
+	WorldTransform* worldTransform_ = new WorldTransform();
+	worldTransform_->Initialize();
 
 	upData_ = new UpData();
 	assert(upData_);
@@ -62,6 +78,9 @@ void GameScene::Initialize() {
 void GameScene::UpDate() {
 
 	camera_.UpdateMatrix();
+
+
+	particle_->UpDate();
 
 	for (size_t i = 0; i < effects_.size();) {
 
@@ -167,14 +186,23 @@ void GameScene::CreateEffect(Vector3 position) {
 }
 
 void GameScene::Draw() {
-	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
+	//ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
 
-	Effect::PreDraw(commandList);
+	//DirectXCommon インスタンス取得
+	//DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 
-	for (auto& effect : effects_) {
+	Model::PreDraw();
 
-		model2_->Draw(*effect.worldTransform, camera_, &effect.colorData);
-	}
+	particle_->Draw(camera_);
 
-	Effect::PostDraw();
+	Model::PostDraw();
+
+	//Effect::PreDraw(commandList);
+
+	//for (auto& effect : effects_) {
+
+	//	model2_->Draw(*effect.worldTransform, camera_, &effect.colorData);
+	//}
+
+	//Effect::PostDraw();
 }

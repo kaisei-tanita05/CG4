@@ -4,6 +4,7 @@
 #include "UpData.h"
 #include "Effect.h"
 #include <vector>
+#include "Particle.h"
 
 using namespace KamataEngine;
 
@@ -26,6 +27,13 @@ private:
 	Effect* model2_ = nullptr;
 	Camera camera_;
 	UpData* upData_ = nullptr;
+	
+	//パーティクル3Dモデルデータ
+	Model* modelParticle_ = nullptr;
+
+	// パーティクル
+	Particle* particle_ = nullptr;
+
 
 	struct EffectData {
 
