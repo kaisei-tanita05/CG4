@@ -1,16 +1,15 @@
 #pragma once
+#include "Effect.h"
 #include "KamataEngine.h"
 #include "Model2.h"
-#include "UpData.h"
-#include "Effect.h"
-#include <vector>
 #include "Particle.h"
+#include "UpData.h"
+#include <vector>
 
 using namespace KamataEngine;
 
 class GameScene {
 public:
-
 	~GameScene();
 
 	void Initialize();
@@ -27,13 +26,12 @@ private:
 	Effect* model2_ = nullptr;
 	Camera camera_;
 	UpData* upData_ = nullptr;
-	
-	//パーティクル3Dモデルデータ
+
+	// パーティクル3Dモデルデータ
 	Model* modelParticle_ = nullptr;
 
 	// パーティクル
 	Particle* particle_ = nullptr;
-
 
 	struct EffectData {
 
