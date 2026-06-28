@@ -66,7 +66,7 @@ void GameScene::Initialize() {
 
 	// カメラ初期化
 	camera_.Initialize();
-	camera_.translation_ = {0, 0, -10.0f};
+	camera_.translation_ = {0, 0, -20.0f};
 
 	WorldTransform* worldTransform_ = new WorldTransform();
 	worldTransform_->Initialize();

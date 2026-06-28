@@ -170,6 +170,7 @@
     <ClCompile Include="Model2.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="UpData.cpp" />
+    <ClCompile Include="WorldTransformEx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\TerrainPS.hlsl">
