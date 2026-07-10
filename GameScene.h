@@ -6,7 +6,7 @@
 #include "UpData.h"
 #include <vector>
 
-using namespace KamataEngine;
+
 
 class GameScene {
 public:
@@ -18,32 +18,32 @@ public:
 
 	void Draw();
 
-	void CreateEffect(Vector3 position);
+	void CreateEffect(KamataEngine::Vector3 position);
 
 	/// <summary>
 	/// パーティクル発生
 	/// </summary>
 	/// <param name="position">発生位置</param>
-	void ParticleBorn(Vector3 position);
+	void ParticleBorn(KamataEngine::Vector3 position);
 
 private:
 	uint32_t textureHandle_ = 0;
 	Model2* model_ = nullptr;
 	Effect* model2_ = nullptr;
-	Camera camera_;
+	KamataEngine::Camera camera_;
 	UpData* upData_ = nullptr;
 
 	// パーティクル3Dモデルデータ
-	Model* modelParticle_ = nullptr;
+	KamataEngine::Model* modelParticle_ = nullptr;
 
 	// パーティクル
 	Particle* particle_ = nullptr;
 
 	struct EffectData {
 
-		WorldTransform* worldTransform = nullptr;
+		KamataEngine::WorldTransform* worldTransform = nullptr;
 
-		Vector3 velocity = {0.0f, 0.0f, 0.0f};
+		KamataEngine::Vector3 velocity = {0.0f, 0.0f, 0.0f};
 
 		float alpha = 1.0f;
 
@@ -53,9 +53,9 @@ private:
 
 		int currentTime = 0;
 
-		Vector4 color = {1, 1, 1, 1}; // ←追加
+		KamataEngine::Vector4 color = {1, 1, 1, 1}; // ←追加
 
-		ObjectColor colorData;
+		KamataEngine::ObjectColor colorData;
 	};
 
 	std::vector<EffectData> effects_;

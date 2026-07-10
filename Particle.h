@@ -3,8 +3,6 @@
 #include <KamataEngine.h>
 #include "UpData.h"
 
-using namespace KamataEngine;
-
 //パーティクル
 class Particle {
 public:
@@ -12,7 +10,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(Model* model, Vector3 position, Vector3 velocity);
+	void Initialize(KamataEngine::Model* model, KamataEngine::Vector3 position, KamataEngine::Vector3 velocity);
 
 	/// <summary>
 	/// 更新
@@ -23,28 +21,28 @@ public:
 	/// 描画
 	/// </summary>
 	/// <param name="camera"></param>
-	void Draw(const Camera& camera);
+	void Draw(const KamataEngine::Camera& camera);
 	// デスフラグのgetter
 	bool IsFinished() const { return isFinished_; }
 
 
 private:
 	//ワールド変換データ
-	WorldTransform worldTransform_;
+	KamataEngine::WorldTransform worldTransform_;
 
 	//モデル
-	Model* model_ = nullptr;
+	KamataEngine::Model* model_ = nullptr;
 
 	UpData* upData_ = nullptr;
 
 	//色変更オブジェクト
-	ObjectColor objectColor_;
+	KamataEngine::ObjectColor objectColor_;
 
 	//色の数値
-	Vector4 color_;
+	KamataEngine::Vector4 color_;
 
 	//移動量
-	Vector3 velocity_;
+	KamataEngine::Vector3 velocity_;
 
 	//終了フラグ
 	bool isFinished_ = false;

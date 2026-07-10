@@ -7,6 +7,7 @@
 #include <math/MathUtility.h>
 
 using namespace MathUtility;
+using namespace KamataEngine;
 
 std::random_device seedGenerator;
 std::mt19937 randomEngine(seedGenerator());
