@@ -1,6 +1,7 @@
 #include "Particle.h"
 #include <cassert>
 #include "Math.h"
+#include <algorithm>
 
 //using namespace MathUtility;
 
@@ -26,6 +27,20 @@ void Particle::Initialize(Model* model, Vector3 position, Vector3 velocity) {
 }
 
 void Particle::UpDate() {
+	//終了なら何もしない
+	if (isFinished_) {
+		return;
+	}
+
+	//カウンターを1フレーム分の秒数進める
+	counter_ += 1.0f / 60.0f;
+
+	//存続時間の上限に達したら
+	if (counter_ >= kDuration_) {
+		counter_ = kDuration_;
+		//終了扱いにする
+		isFinished_ = true;
+	}
 	// 行列を定数バッファに転送
 	if (upData_) {
 		upData_->WorldTransformUpData(worldTransform_);
@@ -40,6 +55,8 @@ void Particle::UpDate() {
 
 	//色変更オブジェクトに色の数値を設定する
 	objectColor_.SetColor(color_);
+
+	color_.w = std::clamp(1.0f - (counter_ / kDuration_), 0.0f, 1.0f);
 }
 
 void Particle::Draw(const Camera& camera) {

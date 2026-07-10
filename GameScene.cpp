@@ -101,6 +101,8 @@ void GameScene::Initialize() {
 		particles_.push_back(particle);
 	}
 
+	
+
 	// カメラ初期化
 	camera_.Initialize();
 	camera_.translation_ = {0, 0, -20.0f};
@@ -178,10 +180,20 @@ void GameScene::UpDate() {
 		}
 	}
 
+
+
 	//パーティクルの更新
 	for (Particle* particle : particles_) {
 		particle->UpDate();
 	}
+
+	particles_.remove_if([](Particle* particle) {
+		if (particle->IsFinished()) {
+			delete particle;
+			return true;
+		}
+		return false;
+	});
 
 }
 
