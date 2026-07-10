@@ -6,7 +6,7 @@
 
 
 
-void Particle::Initialize(Model* model, Vector3 position) {
+void Particle::Initialize(Model* model, Vector3 position, Vector3 velocity) {
 	//NULLポインタチェック
 	assert(model);
 	model_ = model;
@@ -21,6 +21,8 @@ void Particle::Initialize(Model* model, Vector3 position) {
 	color_ = {1, 1, 0, 1};
 
 	worldTransform_.translation_ = position;
+
+	velocity_ = velocity;
 }
 
 void Particle::UpDate() {
@@ -30,7 +32,9 @@ void Particle::UpDate() {
 	}
 
 	//移動
-	worldTransform_.translation_ += {0.0f, 0.0f, 0.0f};
+	worldTransform_.translation_ += velocity_;
+
+	worldTransform_.scale_ = {0.2f, 0.2f, 0.2f};
 
 	worldTransform_.TransferMatrix();
 

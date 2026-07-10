@@ -3,6 +3,14 @@
 #include <ctime>
 #include <numbers>
 #include <cassert>
+#include <random>
+#include <math/MathUtility.h>
+
+using namespace MathUtility;
+
+std::random_device seedGenerator;
+std::mt19937 randomEngine(seedGenerator());
+std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
 
 GameScene::~GameScene() {
 	delete model_;
@@ -69,6 +77,8 @@ void GameScene::Initialize() {
 	//位置
 	//Vector3 position = {0.0f, 0.0f, 0.0f};
 
+	
+
 	// パーティクル初期化
 	//particle_->Initialize(modelParticle_, position);
 
@@ -77,9 +87,16 @@ void GameScene::Initialize() {
 		//生成
 		Particle* particle = new Particle();
 		//位置
-		Vector3 position = {0.5f * i, 0.0f, 0.0f};
+		Vector3 position = {0.0f, 0.0f, 0.0f};
+
+		Vector3 velocity = {distribution(randomEngine), distribution(randomEngine), 0.0f};
+
+		Normalize(velocity);
+		velocity *= (distribution(randomEngine));
+		velocity *= 0.1f;
+
 		//初期化
-		particle->Initialize(modelParticle_, position);
+		particle->Initialize(modelParticle_, position, velocity);
 		//リストに追加
 		particles_.push_back(particle);
 	}
