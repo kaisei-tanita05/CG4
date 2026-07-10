@@ -74,34 +74,8 @@ void GameScene::Initialize() {
 	// パーティクルの生成
 	particle_ = new Particle();
 
-	//位置
-	//Vector3 position = {0.0f, 0.0f, 0.0f};
-
-	
-
-	// パーティクル初期化
-	//particle_->Initialize(modelParticle_, position);
-
-	//パーティクルの生成
-	for (int i = 0; i < 150; i++) {
-		//生成
-		Particle* particle = new Particle();
-		//位置
-		Vector3 position = {0.0f, 0.0f, 0.0f};
-
-		Vector3 velocity = {distribution(randomEngine), distribution(randomEngine), 0.0f};
-
-		Normalize(velocity);
-		velocity *= (distribution(randomEngine));
-		velocity *= 0.1f;
-
-		//初期化
-		particle->Initialize(modelParticle_, position, velocity);
-		//リストに追加
-		particles_.push_back(particle);
-	}
-
-	
+	//乱数の初期化
+	srand((unsigned int)time(nullptr));
 
 	// カメラ初期化
 	camera_.Initialize();
@@ -180,6 +154,12 @@ void GameScene::UpDate() {
 		}
 	}
 
+	if (rand() % 20 == 0) {
+	Vector3 position = {distribution(randomEngine) * 20.0f, distribution(randomEngine) * 20.0f, 0.0f};
+
+	ParticleBorn(position);
+	
+	}
 
 
 	//パーティクルの更新
@@ -240,12 +220,31 @@ void GameScene::CreateEffect(Vector3 position) {
 	effect.colorData.SetColor({(float)(rand() % 256) / 255.0f, (float)(rand() % 256) / 255.0f, (float)(rand() % 256) / 255.0f, 1.0f});
 }
 
+
+
+//パーティクル発生
+void GameScene::ParticleBorn(Vector3 position) {
+
+	for (int i = 0; i < 50; i++) {
+
+		Particle* particle = new Particle();
+
+		Vector3 velocity = {distribution(randomEngine), distribution(randomEngine), 0.0f};
+
+		Normalize(velocity);
+
+		velocity *= distribution(randomEngine);
+		velocity *= 0.1f;
+
+		particle->Initialize(modelParticle_, position, velocity);
+
+		particles_.push_back(particle);
+	}
+}
+
+
 void GameScene::Draw() {
-	//ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
-
-	//DirectXCommon インスタンス取得
-	//DirectXCommon* dxCommon = DirectXCommon::GetInstance();
-
+	
 	Model::PreDraw();
 
 	for (Particle* particle : particles_) {
@@ -253,13 +252,4 @@ void GameScene::Draw() {
 	}
 
 	Model::PostDraw();
-
-	//Effect::PreDraw(commandList);
-
-	//for (auto& effect : effects_) {
-
-	//	model2_->Draw(*effect.worldTransform, camera_, &effect.colorData);
-	//}
-
-	//Effect::PostDraw();
 }

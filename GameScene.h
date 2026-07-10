@@ -20,6 +20,12 @@ public:
 
 	void CreateEffect(Vector3 position);
 
+	/// <summary>
+	/// パーティクル発生
+	/// </summary>
+	/// <param name="position">発生位置</param>
+	void ParticleBorn(Vector3 position);
+
 private:
 	uint32_t textureHandle_ = 0;
 	Model2* model_ = nullptr;
@@ -35,9 +41,9 @@ private:
 
 	struct EffectData {
 
-		WorldTransform* worldTransform;
+		WorldTransform* worldTransform = nullptr;
 
-		Vector3 velocity;
+		Vector3 velocity = {0.0f, 0.0f, 0.0f};
 
 		float alpha = 1.0f;
 
