@@ -97,6 +97,8 @@ void GameScene::Initialize() {
 	modelPlayer_ = Model::CreateFromOBJ("player", true);
 
 	player_->Initialize(modelPlayer_, &camera_, {0.0f, 0.0f, 0.0f});
+
+
 }
 
 void GameScene::UpDate() {
