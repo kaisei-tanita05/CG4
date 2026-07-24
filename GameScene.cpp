@@ -114,9 +114,47 @@ void GameScene::Initialize() {
 	redBar_->SetColor({1.0f, 1.0f, 1.0f, 0.8f});
 	greenBar_->SetColor({1.0f, 1.0f, 1.0f, 0.8f});
 
+	// 数字画像
+	textureHandleNumber_ = TextureManager::Load("./Resources/number/number.png");
+
+	// 開始位置
+	Vector2 startPos = {900.0f, 20.0f};
+
+	// 5桁生成
+	for (int i = 0; i < 5; i++) {
+
+		spriteNumber_[i] = Sprite::Create(textureHandleNumber_, {startPos.x + numberSize_.x * i, startPos.y});
+
+		// 1文字のサイズ
+		spriteNumber_[i]->SetSize({numberSize_});
+
+		// 最初は0
+		spriteNumber_[i]->SetTextureRect({0.0f, 0.0f}, numberSize_);
+	}
 }
 
 void GameScene::UpDate() {
+
+	score_++;
+
+	if (score_ > 99999) {
+		score_ = 0;
+	}
+
+	int digit = 10000;
+	int number = score_;
+
+	for (int i = 0; i < 5; i++) {
+
+		// 今の桁
+		int nowNumber = number / digit;
+
+		spriteNumber_[i]->SetTextureRect({numberSize_.x * nowNumber, 0.0f}, {numberSize_.x, numberSize_.y});
+
+		// 次の桁へ
+		number %= digit;
+		digit /= 10;
+	}
 
 	camera_.UpdateMatrix();
 
@@ -130,7 +168,7 @@ void GameScene::UpDate() {
 
 	greenBar_->SetSize({greenBarWidth_, 40.0f});
 
-	// particle_->UpDate();
+	//particle_->UpDate();
 
 	for (size_t i = 0; i < effects_.size();) {
 
@@ -279,6 +317,9 @@ void GameScene::Draw() {
 	redBar_->Draw();
 	greenBar_->Draw();
 
+	for (int i = 0; i < 5; i++) {
+		spriteNumber_[i]->Draw();
+	}
 	Sprite::PreDraw();
 
 	dxCommon->ClearDepthBuffer();

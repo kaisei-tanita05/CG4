@@ -81,5 +81,15 @@ private:
 	// 減る速さ
 	float greenBarSpeed_ = 1.0f;
 
+	// 数字画像
+	uint32_t textureHandleNumber_ = 0;
 
+	// 5桁分のスプライト
+	KamataEngine::Sprite* spriteNumber_[5] = {};
+
+	// スコア
+	int score_ = 0;
+
+	// 数字1文字のサイズ
+	KamataEngine::Vector2 numberSize_ = {32.0f, 48.0f};
 };
