@@ -14,6 +14,10 @@ std::mt19937 randomEngine(seedGenerator());
 std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
 
 GameScene::~GameScene() {
+
+	delete stage_;
+	stage_ = nullptr;
+
 	delete model_;
 	model_ = nullptr;
 
@@ -87,6 +91,9 @@ void GameScene::Initialize() {
 
 	upData_ = new UpData();
 	assert(upData_);
+
+	stage_ = new stage();
+	stage_->Initialize();
 }
 
 void GameScene::UpDate() {
@@ -176,6 +183,8 @@ void GameScene::UpDate() {
 		return false;
 	});
 
+	stage_->Update();
+
 }
 
 void GameScene::CreateEffect(Vector3 position) {
@@ -253,4 +262,9 @@ void GameScene::Draw() {
 	}
 
 	Model::PostDraw();
+
+	Sprite::PreDraw();
+	stage_->Draw();
+	Sprite::PreDraw();
+
 }

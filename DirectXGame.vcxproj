@@ -169,6 +169,7 @@
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Model2.cpp" />
     <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="stage.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="UpData.cpp" />
     <ClCompile Include="WorldTransformEx.cpp" />
@@ -276,6 +277,7 @@
     <ClInclude Include="Math.h" />
     <ClInclude Include="Model2.h" />
     <ClInclude Include="Particle.h" />
+    <ClInclude Include="stage.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="UpData.h" />
   </ItemGroup>

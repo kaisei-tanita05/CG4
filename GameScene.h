@@ -5,6 +5,8 @@
 #include "Particle.h"
 #include "UpData.h"
 #include <vector>
+#include "stage.h"
+
 
 
 
@@ -61,4 +63,6 @@ private:
 	std::vector<EffectData> effects_;
 
 	std::list<Particle*> particles_;
+
+	stage* stage_ = nullptr;
 };
