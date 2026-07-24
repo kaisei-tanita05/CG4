@@ -86,20 +86,24 @@ void GameScene::Initialize() {
 	camera_.Initialize();
 	camera_.translation_ = {0, 0, -20.0f};
 
-	WorldTransform* worldTransform_ = new WorldTransform();
-	worldTransform_->Initialize();
-
 	upData_ = new UpData();
 	assert(upData_);
 
 	stage_ = new stage();
 	stage_->Initialize();
+
+	player_ = new Player();
+
+	modelPlayer_ = Model::CreateFromOBJ("player", true);
+
+	player_->Initialize(modelPlayer_, &camera_, {0.0f, 0.0f, 0.0f});
 }
 
 void GameScene::UpDate() {
 
 	camera_.UpdateMatrix();
 
+	player_->Update();
 
 	//particle_->UpDate();
 
@@ -255,16 +259,25 @@ void GameScene::ParticleBorn(Vector3 position) {
 
 void GameScene::Draw() {
 	
+	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
+
+
+
+	Sprite::PreDraw();
+	stage_->Draw();
+	Sprite::PreDraw();
+
+	dxCommon->ClearDepthBuffer();
+
 	Model::PreDraw();
 
 	for (Particle* particle : particles_) {
 		particle->Draw(camera_);
 	}
 
+	player_->Draw();
+
 	Model::PostDraw();
 
-	Sprite::PreDraw();
-	stage_->Draw();
-	Sprite::PreDraw();
 
 }

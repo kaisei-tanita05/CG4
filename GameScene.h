@@ -6,6 +6,7 @@
 #include "UpData.h"
 #include <vector>
 #include "stage.h"
+#include "Player.h"
 
 
 
@@ -64,5 +65,8 @@ private:
 
 	std::list<Particle*> particles_;
 
+	Player* player_ = nullptr;
+
+	KamataEngine::Model* modelPlayer_ = nullptr;
 	stage* stage_ = nullptr;
 };
