@@ -1,10 +1,10 @@
 #include "GameScene.h"
+#include <cassert>
 #include <cstdlib>
 #include <ctime>
-#include <numbers>
-#include <cassert>
-#include <random>
 #include <math/MathUtility.h>
+#include <numbers>
+#include <random>
 
 using namespace MathUtility;
 using namespace KamataEngine;
@@ -23,8 +23,8 @@ GameScene::~GameScene() {
 
 	delete model2_;
 	model2_ = nullptr;
-	
-	//3Dモデルデータの解放
+
+	// 3Dモデルデータの解放
 	delete modelParticle_;
 
 	Model2::StaticFinalize();
@@ -73,13 +73,13 @@ void GameScene::Initialize() {
 		}
 	}
 
-	//3Dモデルデータの生成
+	// 3Dモデルデータの生成
 	modelParticle_ = Model::CreateSphere(4, 4);
 
 	// パーティクルの生成
 	particle_ = new Particle();
 
-	//乱数の初期化
+	// 乱数の初期化
 	srand((unsigned int)time(nullptr));
 
 	// カメラ初期化
@@ -98,7 +98,21 @@ void GameScene::Initialize() {
 
 	player_->Initialize(modelPlayer_, &camera_, {0.0f, 0.0f, 0.0f});
 
+	// バーゲージ
+	textureHandleGreenBar_ = TextureManager::Load("./Resources/bar/greenBar.png");
+	textureHandleRedBar_ = TextureManager::Load("./Resources/bar/redBar.png");
 
+	Vector2 barPos = {100.0f, 20.0f};
+
+	redBar_ = Sprite::Create(textureHandleRedBar_, barPos);
+	greenBar_ = Sprite::Create(textureHandleGreenBar_, barPos);
+
+	// 初期サイズ
+	redBar_->SetSize({320.0f, 40.0f});
+	greenBar_->SetSize({320.0f, 40.0f});
+
+	redBar_->SetColor({1.0f, 1.0f, 1.0f, 0.8f});
+	greenBar_->SetColor({1.0f, 1.0f, 1.0f, 0.8f});
 }
 
 void GameScene::UpDate() {
@@ -107,20 +121,21 @@ void GameScene::UpDate() {
 
 	player_->Update();
 
-	//particle_->UpDate();
+	greenBarWidth_ -= greenBarSpeed_;
+
+	if (greenBarWidth_ <= 0.0f) {
+		greenBarWidth_ = maxGreenBarWidth_;
+	}
+
+	greenBar_->SetSize({greenBarWidth_, 40.0f});
+
+	// particle_->UpDate();
 
 	for (size_t i = 0; i < effects_.size();) {
 
 		auto& e = effects_[i];
 
 		e.currentTime++;
-
-		// 移動
-		// e.worldTransform->translation_.x += e.velocity.x;
-		// e.worldTransform->translation_.y += e.velocity.y;
-
-		// 拡大
-		// e.worldTransform->scale_.x += e.scaleSpeed;
 
 		e.worldTransform->rotation_.z += 0.1f;
 
@@ -169,14 +184,12 @@ void GameScene::UpDate() {
 	}
 
 	if (rand() % 20 == 0) {
-	Vector3 position = {distribution(randomEngine) * 20.0f, distribution(randomEngine) * 20.0f, 0.0f};
+		Vector3 position = {distribution(randomEngine) * 20.0f, distribution(randomEngine) * 20.0f, 0.0f};
 
-	ParticleBorn(position);
-	
+		ParticleBorn(position);
 	}
 
-
-	//パーティクルの更新
+	// パーティクルの更新
 	for (Particle* particle : particles_) {
 		particle->UpDate();
 	}
@@ -190,7 +203,6 @@ void GameScene::UpDate() {
 	});
 
 	stage_->Update();
-
 }
 
 void GameScene::CreateEffect(Vector3 position) {
@@ -236,9 +248,7 @@ void GameScene::CreateEffect(Vector3 position) {
 	effect.colorData.SetColor({(float)(rand() % 256) / 255.0f, (float)(rand() % 256) / 255.0f, (float)(rand() % 256) / 255.0f, 1.0f});
 }
 
-
-
-//パーティクル発生
+// パーティクル発生
 void GameScene::ParticleBorn(Vector3 position) {
 
 	for (int i = 0; i < 50; i++) {
@@ -258,15 +268,16 @@ void GameScene::ParticleBorn(Vector3 position) {
 	}
 }
 
-
 void GameScene::Draw() {
-	
+
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
-
-
 
 	Sprite::PreDraw();
 	stage_->Draw();
+
+	redBar_->Draw();
+	greenBar_->Draw();
+
 	Sprite::PreDraw();
 
 	dxCommon->ClearDepthBuffer();
@@ -280,6 +291,4 @@ void GameScene::Draw() {
 	player_->Draw();
 
 	Model::PostDraw();
-
-
 }

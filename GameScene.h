@@ -3,13 +3,10 @@
 #include "KamataEngine.h"
 #include "Model2.h"
 #include "Particle.h"
-#include "UpData.h"
-#include <vector>
-#include "stage.h"
 #include "Player.h"
-
-
-
+#include "UpData.h"
+#include "stage.h"
+#include <vector>
 
 class GameScene {
 public:
@@ -69,4 +66,18 @@ private:
 
 	KamataEngine::Model* modelPlayer_ = nullptr;
 	stage* stage_ = nullptr;
+
+	KamataEngine::Sprite* greenBar_ = nullptr;
+	KamataEngine::Sprite* redBar_ = nullptr;
+
+	// テクスチャ番号
+	uint32_t textureHandleGreenBar_ = 0;
+	uint32_t textureHandleRedBar_ = 0;
+
+	// ゲージ
+	float greenBarWidth_ = 320.0f;
+	const float maxGreenBarWidth_ = 320.0f;
+
+	// 減る速さ
+	float greenBarSpeed_ = 1.0f;
 };
