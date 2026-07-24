@@ -194,6 +194,7 @@ void GameScene::UpDate() {
 
 			delete e.worldTransform;
 			e.worldTransform = nullptr;
+			
 
 			effects_.erase(effects_.begin() + i);
 

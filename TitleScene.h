@@ -1,10 +1,19 @@
 #include <KamataEngine.h>
-#include "UpData.h" 
+#include "UpData.h"
+
+class Fade;
 
 
 class TitleScene {
 
 public:
+
+	enum class Phase {
+		kFadeIn,  // フェードイン
+		kMain,    // メイン部
+		kFadeOut, // フェードアウト
+	};
+
 	/// <summary>
 	/// 解放処理
 	/// </summary>
@@ -25,6 +34,8 @@ public:
 	/// </summary>
 	void Draw();
 
+	bool IsFinished() const { return finished_; }
+
 private:
 	UpData* upData_ = nullptr;
 	// ビュープロジェクション
@@ -40,4 +51,11 @@ private:
 	float enterTimer_ = 0.0f;
 
 	KamataEngine::ObjectColor objectColorEnter_;
+
+	Fade* fade_ = nullptr;
+
+	// 現在のフェーズ
+	Phase phase_ = Phase::kFadeIn;
+
+	bool finished_ = false;
 };

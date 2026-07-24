@@ -164,6 +164,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="Fade.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Math.cpp" />
@@ -274,6 +275,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Effect.h" />
+    <ClInclude Include="Fade.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Model2.h" />

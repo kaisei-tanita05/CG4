@@ -2,6 +2,7 @@
 #include "Math.h"
 #include <numbers>
 #include <cassert>
+#include "Fade.h"
 
 using namespace KamataEngine;
 
@@ -14,6 +15,9 @@ TitleScene::~TitleScene() {
 
 	delete worldTransformEnter_;
 	worldTransformEnter_ = nullptr;
+	
+	delete fade_;
+	fade_ = nullptr;
 }
 
 
@@ -21,6 +25,10 @@ void TitleScene::Initialize() {
 
 	// カメラ初期化
 	camera_.Initialize();
+
+	fade_ = new Fade();
+	fade_->Initialize();
+	fade_->Start(Fade::Status::FadeIn, 1.0f);
 
 	const float kScaleTitle = 6.0f;
 	const float kScaleEnter = 3.0f;
@@ -51,6 +59,30 @@ void TitleScene::Initialize() {
 void TitleScene::UpDate() {
 	// カメラ更新
 	//camera_.UpdateMatrix();
+
+	switch (phase_) {
+	case Phase::kFadeIn:
+		fade_->Update();
+
+		if (fade_->IsFinished()) {
+			phase_ = Phase::kMain;
+		}
+		break;
+	case Phase::kMain:
+
+		if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
+			fade_->Start(Fade::Status::FadeOut, 1.0f);
+			phase_ = Phase::kFadeOut;
+		}
+		break;
+	case Phase::kFadeOut:
+		fade_->Update();
+		if (fade_->IsFinished()) {
+			finished_ = true;
+		}
+		break;
+	}
+
 
 	const float kGoalY = 0.0f;
 
@@ -86,4 +118,5 @@ void TitleScene::Draw() {
 	titleModel_->Draw(*worldTransformTitle_, camera_);
 	enterModel_->Draw(*worldTransformEnter_, camera_, &objectColorEnter_);
 	Model::PostDraw();
+	fade_->Draw();
 }

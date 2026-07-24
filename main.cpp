@@ -36,7 +36,7 @@ void UpdateScene() {
 
 		titleScene->UpDate();
 
-		if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
+		if (titleScene->IsFinished()) {
 			scene = Scene::kGame;
 		}
 
