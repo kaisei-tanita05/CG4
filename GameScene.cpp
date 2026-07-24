@@ -113,6 +113,7 @@ void GameScene::Initialize() {
 
 	redBar_->SetColor({1.0f, 1.0f, 1.0f, 0.8f});
 	greenBar_->SetColor({1.0f, 1.0f, 1.0f, 0.8f});
+
 }
 
 void GameScene::UpDate() {

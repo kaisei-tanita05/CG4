@@ -80,4 +80,6 @@ private:
 
 	// 減る速さ
 	float greenBarSpeed_ = 1.0f;
+
+
 };
